@@ -26,12 +26,12 @@ db = DBSCAN(eps=2.1, min_samples=6, metric="chebyshev").fit_predict(df)
 print("EPS: " + str(i) + "   "  + str(collections.Counter(db)))
 
 noise_df = pd.DataFrame()
-noice_df = pd.DataFrame()
+groups_df = pd.DataFrame()
 for i in range(len(db)):
     if db[i] == -1:
         noise_df = noise_df.append(df_raw.loc[i, :])
     else:
-        groups_df = noice_df.append(df_raw.loc[i, :])
+        groups_df = groups_df.append(df_raw.loc[i, :])
     
 print(noise_df.describe())
 print(groups_df.describe())
