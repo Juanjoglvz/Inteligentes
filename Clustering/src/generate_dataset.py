@@ -1,18 +1,27 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar 20 15:52:50 2020
+
+@author: resu
+"""
+
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.ensemble import IsolationForest
 
 df = pd.read_csv("../data/raw/source.csv")
-    df.drop(["Channel", "Region"], inplace=True, axis=1)
 
-scaler = MinMaxScaler()
-data = scaler.fit_transform(df)
+df = pd.get_dummies(df, columns=["Channel", "Region"])
+
+scaler = StandardScaler()
+df[:] = scaler.fit_transform(df)
 
 pca = PCA(n_components=2)
-data = pca.fit_transform(data)
+data = pca.fit_transform(df)
 
 clf = IsolationForest(max_samples=10) # Fit outlier detection
 clf.fit(df)
@@ -33,6 +42,5 @@ for i in range(len(df)):
     else:
         inliers_df = inliers_df.append(df.loc[i, :])
 
-#plt.scatter(data[:, 0], data[:, 1])
-#plt.waitforbuttonpress()
 
+inliers_df.to_csv("../data/interim/no_outliers_scaled.csv", index=False)

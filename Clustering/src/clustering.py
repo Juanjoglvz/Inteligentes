@@ -14,24 +14,24 @@ from sklearn.ensemble import IsolationForest
 from sklearn.cluster import DBSCAN
 import collections
 
-df = pd.read_csv("../data/raw/source.csv")
-df.drop(["Channel", "Region"], inplace=True, axis=1)
+df_raw = pd.read_csv("../data/raw/source.csv")
+df_raw.drop(["Channel", "Region"], inplace=True, axis=1)
 
-scaler = MinMaxScaler()
-data = scaler.fit_transform(df) # Scale data
+df = pd.read_csv("../data/interim/no_outliers_scaled.csv")
 
-clf = IsolationForest(max_samples=100) # Fit outlier detection
-clf.fit(data)
-pred = clf.predict(data)
 
-for i in range(len(df)): # Drop outliers
-    if pred[i] == -1:
-        df.drop(index=i, axis=0, inplace=True)
+i = 2.1
+#for i in np.arange(0.1, 2.4, step = 0.005):
+db = DBSCAN(eps=2.1, min_samples=6, metric="chebyshev").fit_predict(df)
+print("EPS: " + str(i) + "   "  + str(collections.Counter(db)))
 
-data = df.values
-scaler = MinMaxScaler()
-data = scaler.fit_transform(df) # Scale the outlier-less dataset
-
-for i in np.arange(0.1, 0.25, step = 0.005):
-    db = DBSCAN(eps=i, min_samples=3).fit_predict(data)
-    print("EPS: " + str(i) + "   "  + str(collections.Counter(db)))
+noise_df = pd.DataFrame()
+noice_df = pd.DataFrame()
+for i in range(len(db)):
+    if db[i] == -1:
+        noise_df = noise_df.append(df_raw.loc[i, :])
+    else:
+        groups_df = noice_df.append(df_raw.loc[i, :])
+    
+print(noise_df.describe())
+print(groups_df.describe())
