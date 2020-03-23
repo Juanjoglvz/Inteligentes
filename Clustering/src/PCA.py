@@ -6,7 +6,7 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.ensemble import IsolationForest
 
 df = pd.read_csv("../data/raw/source.csv")
-    df.drop(["Channel", "Region"], inplace=True, axis=1)
+df.drop(["Channel", "Region"], inplace=True, axis=1)
 
 scaler = MinMaxScaler()
 data = scaler.fit_transform(df)

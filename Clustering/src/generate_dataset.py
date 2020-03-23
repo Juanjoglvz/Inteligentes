@@ -20,10 +20,10 @@ df = pd.get_dummies(df, columns=["Channel", "Region"])
 scaler = StandardScaler()
 df[:] = scaler.fit_transform(df)
 
-pca = PCA(n_components=2)
+pca = PCA(n_components=2, random_state=2834)
 data = pca.fit_transform(df)
 
-clf = IsolationForest(max_samples=10) # Fit outlier detection
+clf = IsolationForest(max_samples=10, random_state=8345723) # Fit outlier detection
 clf.fit(df)
 pred = clf.predict(df)
 
@@ -32,7 +32,8 @@ for i in range(len(pred)):
         plt.scatter(data[i, 0], data[i, 1], c="blue")
     else:
         plt.scatter(data[i, 0], data[i, 1], c="green")
-  
+
+
 inliers_df = pd.DataFrame()
 outliers_df = pd.DataFrame()
 
@@ -42,5 +43,8 @@ for i in range(len(df)):
     else:
         inliers_df = inliers_df.append(df.loc[i, :])
 
+print(len(outliers_df))
+print(len(inliers_df))
 
+plt.waitforbuttonpress()
 inliers_df.to_csv("../data/interim/no_outliers_scaled.csv", index=False)
