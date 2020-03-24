@@ -1,10 +1,8 @@
 import pandas as pd
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
-df = pd.read_csv("../data/interim/groups.csv")
+df = pd.read_csv("../data/interim/groups_a_priori.csv")
 
 groups = []
 groups_cuant = []
@@ -47,11 +45,13 @@ for g in df["Group"].unique():
     print("Mean spends:  {}".format(total_sum/len(current_group)))
 
 
-# Carry out anova tests for each variable
-for variable in ["Delicassen", "Detergents_Paper", "Fresh", "Frozen", "Grocery", "Milk"]:
-    print("Variable: {}".format(variable))
+# Watch mean and median spends for each group, each product
+for g in df["Group"].unique():
+    current_group = groups[int(g)]
+    variables = ["Delicassen", "Detergents_Paper", "Fresh", "Frozen", "Grocery", "Milk"];
 
-    model = smf.ols("{} ~ Group".format(variable), data=df).fit()
-    aov_table = sm.stats.anova_lm(model, typ=1)
-    print(aov_table)
+    print("Group {}".format(int(g)))
+    for variable in variables:
+        print("{} mean: {}".format(variable, current_group[variable].mean()))
+        print("{} median: {}".format(variable, current_group[variable].median()))
 
