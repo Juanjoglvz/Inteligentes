@@ -41,6 +41,6 @@ print(len(inliers_df))
 inliers_df["Group"] = inliers_df.apply(groupings, axis=1)
 
 # save to csv
-df.to_csv("../data/interim/groups_a_priori.csv", index=False)
+inliers_df.to_csv("../data/interim/groups_a_priori.csv", index=False)
 
 
