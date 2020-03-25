@@ -13,7 +13,6 @@ data = scaler.fit_transform(df)
 
 pca = PCA(n_components=2)
 data = pca.fit_transform(data)
-
 clf = IsolationForest(max_samples=10) # Fit outlier detection
 clf.fit(df)
 pred = clf.predict(df)
@@ -35,4 +34,3 @@ for i in range(len(df)):
 
 #plt.scatter(data[:, 0], data[:, 1])
 #plt.waitforbuttonpress()
-
