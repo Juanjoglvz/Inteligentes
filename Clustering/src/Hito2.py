@@ -7,10 +7,11 @@ df = pd.read_csv("../data/interim/groups_a_priori.csv")
 groups = []
 groups_cuant = []
 centroids = []
+group_labels = df["Group"].unique()
+group_labels.sort()
 
-
-# Split data into cualitative and cuantitative data and generate centroids using median
-for g in df["Group"].unique():
+# Split data into cualitative and cuantitative data and generate centroids using media
+for g in group_labels:
     current_group = df[df["Group"] == g]
     centroids.append(current_group.median())
 
@@ -24,7 +25,7 @@ for g in df["Group"].unique():
 print(centroids)
 
 # Watch effect of Region and Channel in groups
-for g in df["Group"].unique():
+for g in group_labels:
     current_group = groups_cuant[int(g)]
 
     print("Group {}".format(int(g)))
@@ -33,7 +34,7 @@ for g in df["Group"].unique():
 
 
 # Watch total and mean spends for each group
-for g in df["Group"].unique():
+for g in group_labels:
     current_group = groups[int(g)]
 
     current_group["Total"] = current_group.sum(axis=1)
@@ -46,7 +47,7 @@ for g in df["Group"].unique():
 
 
 # Watch mean and median spends for each group, each product
-for g in df["Group"].unique():
+for g in group_labels:
     current_group = groups[int(g)]
     variables = ["Delicassen", "Detergents_Paper", "Fresh", "Frozen", "Grocery", "Milk"];
 
