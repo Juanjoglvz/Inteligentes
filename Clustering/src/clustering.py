@@ -10,19 +10,16 @@ from sklearn.cluster import DBSCAN
 import collections
 
 df_raw = pd.read_csv("../data/raw/source.csv")
-#df_raw.drop(["Channel", "Region"], inplace=True, axis=1)
 
 df = pd.read_csv("../data/interim/no_outliers_scaled.csv")
 
-
-i = 2.1
-#for i in np.arange(0.1, 2.4, step = 0.005):
-db = DBSCAN(eps=2.1, min_samples=6, metric="chebyshev").fit_predict(df)
-print("EPS: " + str(i) + "   "  + str(collections.Counter(db)))
+eps = 1.7
+db = DBSCAN(eps=1.7, min_samples=12, metric="euclidean").fit_predict(df) # Clusterize
+print("EPS: " + eps + "   "  + str(collections.Counter(db))) # Print the groups and the number of members of each group
 
 noise_df = pd.DataFrame()
 groups_df = pd.DataFrame()
-for i in range(len(db)):
+for i in range(len(db)): # Create new datasets that hold the noise and the group data
     if db[i] == -1:
         noise_df = noise_df.append(df_raw.loc[i, :])
     else:
@@ -33,4 +30,4 @@ for i in range(len(db)):
     
 print(noise_df.describe())
 print(groups_df.describe())
-groups_df.to_csv("../data/interim/groups.csv", index=False)
+groups_df.to_csv("../data/interim/groups.csv", index=False) # Save the groups dataset

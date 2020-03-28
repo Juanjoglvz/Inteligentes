@@ -7,53 +7,48 @@ Created on Fri Mar 20 16:34:31 2020
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.ensemble import IsolationForest
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
 
-from scipy.optimize import minimize
-
-euclidean_eps = {   2: 1.9,
-                    4: 2.0,
-                    6: 2.1,
-                    8: 2.15,
-                    10: 2.15,
-                    12: 2.3,
-                    14: 2.4,
-                    16: 2.5,
-                    18: 2.5,
-                    20: 2.6,
-                    22: 2.4,
-                    24: 2.5,
-                    26: 3.2,
-                    28: 3.3,
-                    30: 2.7
-        }
+euclidean_eps = {   2: 1.2,
+                    4: 1.32,
+                    6: 1.35,
+                    8: 1.5,
+                    10: 1.8,
+                    12: 1.7,
+                    14: 1.6,
+                    16: 1.7,
+                    18: 1.8,
+                    20: 1.65,
+                    22: 1.8,
+                    24: 1.7,
+                    26: 1.9,
+                    28: 1.95,
+                    30: 1.9
+                }
 
 
-chebyshev_eps = {   2: 1.4,
-                    4: 1.6,
-                    6: 2.1,
-                    8: 2.15,
-                    10: 2.15,
-                    12: 2.15,
-                    14: 2.15,
-                    16: 2.15,
-                    18: 2.15,
-                    20: 2.15,
-                    22: 2.15,
-                    24: 2.15,
-                    26: 2.15,
-                    28: 2.15,
-                    30: 2.15
-        }
+chebyshev_eps = {   2: 1.0,
+                    4: 1.2,
+                    6: 1.3,
+                    8: 1.3,
+                    10: 1.5,
+                    12: 1.5,
+                    14: 1.55,
+                    16: 1.65,
+                    18: 1.7,
+                    20: 1.6,
+                    22: 1.7,
+                    24: 1.7,
+                    26: 2.0,
+                    28: 2.0,
+                    30: 2.0
+                }
 
-def cluster(df, minpts, eps, metric):    
-    
+def cluster(df, minpts, eps, metric):
     db = DBSCAN(eps=eps, min_samples=minpts, metric=metric).fit_predict(df)
+    
+    db = [None if d == -1 else d for d in db]
     
     try:
         sil = silhouette_score(df, db)
