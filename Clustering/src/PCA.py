@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # Control variable
     hito_a_realizar = 1
 
-    if hito_a_realizar==1:
+    if hito_a_realizar = =1:
         hito1()
     else:
         hito2()

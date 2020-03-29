@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 20 15:52:50 2020
-
-@author: resu
-"""
 
 import pandas as pd
 import numpy as np
@@ -21,7 +16,7 @@ df.drop(["Channel", "Region"], axis=1, inplace=True) # Drop non-useful columns
 df_scaled = df.copy()
 
 scaler = StandardScaler()
-df_scaled[:] = scaler.fit_transform(df) # Scale the dataset so the epsilon knee method is easier to see
+df_scaled[:] = scaler.fit_transform(df) # Scale the dataset so the epsilon knee method is easier to apply
 
 pca = PCA(n_components=2, random_state=2834) # Apply PCA to the scaled dataset
 data = pca.fit_transform(df_scaled)

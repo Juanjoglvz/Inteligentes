@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  4 23:05:27 2020
-
-@author: resu
-"""
 
 import pandas as pd
 from sklearn.cluster import DBSCAN
