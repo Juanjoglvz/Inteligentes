@@ -20,14 +20,12 @@ Hdata = data.Hospitalized;
 Rdata = data.DailyRecoveries;
 Ddata = data.DailyDeaths;
 
-Ifinal = I + H;
-
-RMSEI = computeRMSE(Idata(2:end), diff(Ifinal));
+RMSEI = computeRMSE(Idata, I);
 RMSEH = computeRMSE(Hdata, H);
 RMSER = computeRMSE(Rdata(2:end), diff(R));
 RMSED = computeRMSE(Ddata(2:end), diff(D));
 
-RMSE = RMSEI + RMSEH + RMSER + RMSED;
+RMSE = RMSEI + RMSRMSER + RMSED;
 %RMSE = RMSEI;
     
 end
