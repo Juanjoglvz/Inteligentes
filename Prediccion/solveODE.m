@@ -1,6 +1,5 @@
 function [x, y] = solveODE(tspan, constants, params)
-[population, dayQuarantine, timeToHospitalization, timeToRecovery] ...
-    = unpackModelConstants(constants);
+[population, dayQuarantine] = unpackModelConstants(constants);
 
 quarantinePercent = unpackModelParams(params);
 
@@ -32,20 +31,16 @@ H = y(4);
 R = y(5);
 D = y(6);
 
-[population, dayQuarantine, timeToHospitalization, timeToRecovery, timeToDecease, timeToRecoveryHospitalized] ...
-    = unpackModelConstants(constants);
+[population, dayQuarantine] = unpackModelConstants(constants);
 
 [~, betaBefore, betaAfter, betaQuarantine, ...
-    ratioHospitalization, ratioRecovery] = ...
+    gammaInfected, deltaHospitalized, gammaHospitalized, tauHospitalized] = ...
     unpackModelParams(params);
 
 if t <= dayQuarantine
     beta = betaBefore;
-    dquarantinedt = 0;
 else
     beta = betaAfter;
-    
-    dquarantinedt = betaQuarantine * Q * I / population;
 end
 
 dydt = [ -1 * betaQuarantine * Q * I / population; % Q
@@ -54,17 +49,17 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
         
         beta * S * I / population ...
             + betaQuarantine * Q * I / population ...
-            - (ratioHospitalization / timeToHospitalization) * I ...
-            - ((1 - ratioHospitalization) / timeToRecovery) * I; % I
+            - deltaHospitalized * I ...
+            - gammaInfected * I; % I
             
-        (ratioHospitalization / timeToHospitalization) * I ...
-            - (ratioRecovery / timeToRecoveryHospitalized) * H ...
-            - ((1 - ratioRecovery) / timeToDecease) * H; % H
+        deltaHospitalized * I ...
+            - gammaHospitalized * H ...
+            - tauHospitalized * H; % H
         
-        ((1 - ratioHospitalization) / timeToRecovery) * I ...
-            + (ratioRecovery / timeToRecoveryHospitalized) * H; % R
+        gammaInfected * I ...
+            + gammaHospitalized * H; % R
         
-        ((1 - ratioRecovery) / timeToDecease) * H]; % D
+        tauHospitalized * H;]; % D
 end
 
 function s = ddehist(t)

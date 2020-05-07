@@ -30,7 +30,7 @@ for i=1:length(name_ccaa)
     
     [optimalParams, RMSE] = ga(@(x) ...
         optimizeODE(data, length(data.label_x), solverStep, ...
-        constants, x), 6, [], [], [], [], [0 0 0 0 0 0], [1 1 1 1 1 1], @(x) nonlcon(x));
+        constants, x), 8, [], [], [], [], [0 0 0 0 0 0 0 0], [1 1 1 1 1 1 1 1], @(x) nonlcon(x));
 
     [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 2,...
         solverStep, constants, optimalParams);
@@ -38,7 +38,7 @@ for i=1:length(name_ccaa)
 end
 
 %optimalParams(5) = 0.2;
-optimalParams(6) = 0.7;
+%optimalParams(6) = 0.7;
 %optimalParams = [0.7 0.59 0.1 0.15 0.05 0.065];
 
 [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 3,...
@@ -70,7 +70,6 @@ grid minor
 
 figure
 hold on
-%plot(x(2:end), diff(y(:, 6)));
 plot(x(2:end), diff(y(:, 6)));
 plot(1:length(data.label_x), data.DailyDeaths);
 xlabel('Dias');
