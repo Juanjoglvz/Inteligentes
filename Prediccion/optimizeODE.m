@@ -22,7 +22,7 @@ Rdata = data.DailyRecoveries;
 Ddata = data.DailyDeaths;
 
 RMSEI = computeRMSE(Idata, I);
-RMSEH = computeRMSE(Hdata, H);
+RMSEH = computeRMSE(Hdata, cumsum(H));
 RMSER = computeRMSE(Rdata(2:end), diff(R));
 RMSED = computeRMSE(Ddata(2:end), diff(D));
 

@@ -32,28 +32,29 @@ for i=1:length(name_ccaa)
         optimizeODE(data, length(data.label_x), solverStep, ...
         constants, x), 6, [], [], [], [], [0 0 0 0 0 0], [1 1 1 1 1 1], @(x) nonlcon(x));
 
-    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 5,...
+    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 2,...
         solverStep, constants, optimalParams);
 
 end
 
+%optimalParams(5) = 0.2;
+optimalParams(6) = 0.7;
 %optimalParams = [0.7 0.59 0.1 0.15 0.05 0.065];
 
-[RMSE, x, y] = optimizeODE(data, length(data.label_x) * 5,...
+[RMSE, x, y] = optimizeODE(data, length(data.label_x) * 3,...
     solverStep, constants, optimalParams);
 
 figure
 hold on
 plot(x, y(:, 3));
-plot(1:length(data.label_x), data.Cases);
-%plot(1:length(data.label_x), data.DailyCases);
+plot(1:length(data.label_x), data.DailyCases);
 xlabel('Dias');
 ylabel('Casos diarios');
 grid minor
 
 figure
 hold on
-plot(x, y(:, 4));
+plot(x, cumsum(y(:, 4)));
 plot(1:length(data.label_x), data.Hospitalized);
 xlabel('Dias');
 ylabel('Hospitalizaciones totales');
