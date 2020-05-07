@@ -8,11 +8,11 @@ odes = @(t, y) getODE(t, y, constants, params);
 tspanBefore = tspan(tspan <= dayQuarantine);
 tspanAfter = tspan(tspan >= dayQuarantine);
 
-[x1, y1] = ode45(odes, tspanBefore, [0, population - 2, 2, 0, 0, 0]);
+[x1, y1] = ode45(odes, tspanBefore, [0, population - 2, 2, 0, 0, 0, 0, 0, 0]);
 
 dquarantinedt = y1(end, 2) * quarantinePercent;
 
-[x2, y2] = ode45(odes, tspanAfter, [dquarantinedt, y1(end, 2) - dquarantinedt, y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6)]);
+[x2, y2] = ode45(odes, tspanAfter, [dquarantinedt, y1(end, 2) - dquarantinedt, y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6), y1(end, 7), y1(end, 8), y1(end, 9)]);
 
 x = cat(1, x1, x2(2:end, :));
 y = cat(1, y1, y2(2:end, :));
@@ -28,13 +28,16 @@ Q = y(1);
 S = y(2);
 I = y(3);
 H = y(4);
-R = y(5);
-D = y(6);
+U = y(5);
+UR = y(6);
+R = y(7);
+D = y(8);
 
 [population, dayQuarantine] = unpackModelConstants(constants);
 
 [~, betaBefore, betaAfter, betaQuarantine, ...
-    gammaInfected, deltaHospitalized, gammaHospitalized, tauHospitalized] = ...
+    deltaHospitalized, gammaInfected, gammaHospitalized, tauHospitalized, ...
+    sigmaHospitalized, tauCritical, roCritical, gammaRecoveredCritical] = ...
     unpackModelParams(params);
 
 if t <= dayQuarantine
@@ -54,12 +57,22 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
             
         deltaHospitalized * I ...
             - gammaHospitalized * H ...
-            - tauHospitalized * H; % H
+            - tauHospitalized * H
+            - sigmaHospitalized * H; % H
+            
+        sigmaHospitalized * H ...
+            - tauCritical * U ...
+            - roCritical * U; % U
+        
+        roCritical * U ...
+            - gammaRecoveredCritical * UR; % UR
         
         gammaInfected * I ...
-            + gammaHospitalized * H; % R
+            + gammaHospitalized * H ...
+            + gammaRecoveredCritical * UR; % R
         
-        tauHospitalized * H;]; % D
+        tauHospitalized * H ...
+            + tauCritical * U;]; % D
 end
 
 function s = ddehist(t)

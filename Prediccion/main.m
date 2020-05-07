@@ -7,11 +7,9 @@ ccaaPopulation = getCCAAPopulation();
 solverStep = 1;
 quarantineDay = 26;
 
-timeToHospitalization = 5.8;
-timeToRecovery = 14;
+vars = 12;
 
-timeToDecease = 7.5;
-timeToRecoveryHospitalized = 7;
+timeFactor = 5;
 
 for i=1:length(name_ccaa)
     if i ~= 9
@@ -21,8 +19,7 @@ for i=1:length(name_ccaa)
     ccaa = name_ccaa{i};
     population = ccaaPopulation(ccaa);
     
-    constants = [population, quarantineDay, timeToHospitalization, ...
-        timeToRecovery, timeToDecease, timeToRecoveryHospitalized];
+    constants = [population, quarantineDay];
 
     data = output.historic{i};
 
@@ -30,18 +27,19 @@ for i=1:length(name_ccaa)
     
     [optimalParams, RMSE] = ga(@(x) ...
         optimizeODE(data, length(data.label_x), solverStep, ...
-        constants, x), 8, [], [], [], [], [0 0 0 0 0 0 0 0], [1 1 1 1 1 1 1 1], @(x) nonlcon(x));
+        constants, x), vars, [], [], [], [], zeros(1, vars), ones(1, vars), @(x) nonlcon(x));
 
-    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 2,...
+    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * timeFactor,...
         solverStep, constants, optimalParams);
 
 end
 
-%optimalParams(5) = 0.2;
-%optimalParams(6) = 0.7;
-%optimalParams = [0.7 0.59 0.1 0.15 0.05 0.065];
+[quarantinePercent, betaBefore, betaAfter, betaQuarantine, ...
+    deltaHospitalized, gammaInfected, gammaHospitalized, tauHospitalized, ...
+    sigmaHospitalized, tauCritical, roCritical, gammaRecoveredCritical] = ...
+    unpackModelParams(optimalParams);
 
-[RMSE, x, y] = optimizeODE(data, length(data.label_x) * 3,...
+[RMSE, x, y] = optimizeODE(data, length(data.label_x) * timeFactor,...
     solverStep, constants, optimalParams);
 
 figure
@@ -62,7 +60,15 @@ grid minor
 
 figure
 hold on
-plot(x(2:end), diff(y(:, 5)));
+plot(x, cumsum(y(:, 5)));
+plot(1:length(data.label_x), data.Critical);
+xlabel('Dias');
+ylabel('Ingresos en UCI totales');
+grid minor
+
+figure
+hold on
+plot(x(2:end), diff(y(:, 7)));
 plot(1:length(data.label_x), data.DailyRecoveries);
 xlabel('Dias');
 ylabel('Recuperaciones diarias');
@@ -70,7 +76,7 @@ grid minor
 
 figure
 hold on
-plot(x(2:end), diff(y(:, 6)));
+plot(x(2:end), diff(y(:, 8)));
 plot(1:length(data.label_x), data.DailyDeaths);
 xlabel('Dias');
 ylabel('Defunciones diarias');

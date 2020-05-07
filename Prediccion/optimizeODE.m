@@ -12,21 +12,26 @@ Q = interpolatedY(:, 1);
 S = interpolatedY(:, 2);
 I = interpolatedY(:, 3);
 H = interpolatedY(:, 4);
-R = interpolatedY(:, 5);
-D = interpolatedY(:, 6);
+U = interpolatedY(:, 5);
+UR = interpolatedY(:, 6);
+R = interpolatedY(:, 7);
+D = interpolatedY(:, 8);
 
-%Idata = data.AcumulatedPRC;
+Htotal = H + U + UR;
+
 Idata = data.DailyCases;
 Hdata = data.Hospitalized;
+Udata = data.Critical;
 Rdata = data.DailyRecoveries;
 Ddata = data.DailyDeaths;
 
 RMSEI = computeRMSE(Idata, I);
-RMSEH = computeRMSE(Hdata, cumsum(H));
+RMSEH = computeRMSE(Hdata, cumsum(Htotal));
+RMSEU = computeRMSE(Udata, cumsum(U));
 RMSER = computeRMSE(Rdata(2:end), diff(R));
 RMSED = computeRMSE(Ddata(2:end), diff(D));
 
-RMSE = RMSEI + RMSEH + RMSER + RMSED;
+RMSE = RMSEI + RMSEH + RMSEU + RMSER + RMSED;
 %RMSE = RMSEI;
     
 end
