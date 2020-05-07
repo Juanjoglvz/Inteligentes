@@ -15,14 +15,13 @@ H = interpolatedY(:, 4);
 R = interpolatedY(:, 5);
 D = interpolatedY(:, 6);
 
+%Idata = data.AcumulatedPRC;
 Idata = data.DailyCases;
 Hdata = data.Hospitalized;
 Rdata = data.DailyRecoveries;
 Ddata = data.DailyDeaths;
 
-Ifinal = I + H;
-
-RMSEI = computeRMSE(Idata(2:end), diff(Ifinal));
+RMSEI = computeRMSE(Idata, I);
 RMSEH = computeRMSE(Hdata, H);
 RMSER = computeRMSE(Rdata(2:end), diff(R));
 RMSED = computeRMSE(Ddata(2:end), diff(D));

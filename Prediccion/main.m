@@ -14,7 +14,7 @@ timeToDecease = 7.5;
 timeToRecoveryHospitalized = 7;
 
 for i=1:length(name_ccaa)
-    if i ~= 6
+    if i ~= 9
         continue;
     end
     
@@ -32,20 +32,21 @@ for i=1:length(name_ccaa)
         optimizeODE(data, length(data.label_x), solverStep, ...
         constants, x), 6, [], [], [], [], [0 0 0 0 0 0], [1 1 1 1 1 1], @(x) nonlcon(x));
 
-    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 2,...
+    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * 5,...
         solverStep, constants, optimalParams);
 
 end
 
 %optimalParams = [0.7 0.59 0.1 0.15 0.05 0.065];
 
-[RMSE, x, y] = optimizeODE(data, length(data.label_x) * 2.5,...
+[RMSE, x, y] = optimizeODE(data, length(data.label_x) * 5,...
     solverStep, constants, optimalParams);
 
 figure
 hold on
 plot(x, y(:, 3));
-plot(1:length(data.label_x), data.DailyCases);
+plot(1:length(data.label_x), data.Cases);
+%plot(1:length(data.label_x), data.DailyCases);
 xlabel('Dias');
 ylabel('Casos diarios');
 grid minor
@@ -55,7 +56,7 @@ hold on
 plot(x, y(:, 4));
 plot(1:length(data.label_x), data.Hospitalized);
 xlabel('Dias');
-ylabel('Hospitalizaciones');
+ylabel('Hospitalizaciones totales');
 grid minor
 
 figure
@@ -68,6 +69,7 @@ grid minor
 
 figure
 hold on
+%plot(x(2:end), diff(y(:, 6)));
 plot(x(2:end), diff(y(:, 6)));
 plot(1:length(data.label_x), data.DailyDeaths);
 xlabel('Dias');
