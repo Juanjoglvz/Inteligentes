@@ -10,12 +10,14 @@ interpolatedY = interp1(x, y, 1:dataTime);
 
 Q = interpolatedY(:, 1);
 S = interpolatedY(:, 2);
-I = interpolatedY(:, 3);
-H = interpolatedY(:, 4);
-U = interpolatedY(:, 5);
-UR = interpolatedY(:, 6);
-R = interpolatedY(:, 7);
-D = interpolatedY(:, 8);
+L = interpolatedY(:, 3);
+I = interpolatedY(:, 4);
+A = interpolatedY(:, 5);
+H = interpolatedY(:, 6);
+U = interpolatedY(:, 7);
+UR = interpolatedY(:, 8);
+R = interpolatedY(:, 9);
+D = interpolatedY(:, 10);
 
 Idata = data.DailyCases;
 Hdata = data.Hospitalized;
@@ -23,7 +25,7 @@ Udata = data.Critical;
 Rdata = data.DailyRecoveries;
 Ddata = data.DailyDeaths;
 
-RMSEI = computeRMSE(Idata, I);
+RMSEI = computeRMSE(Idata, L);
 RMSEH = computeRMSE(Hdata, cumsum(H));
 RMSEU = computeRMSE(Udata, cumsum(U));
 RMSER = computeRMSE(Rdata(2:end), diff(R));

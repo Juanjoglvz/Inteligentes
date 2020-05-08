@@ -1,20 +1,25 @@
-function [quarantinePercent, betaBefore, betaAfter, betaQuarantine, ...
-    deltaHospitalized, gammaInfected, gammaHospitalized, tauHospitalized, ...
+function [quarantinePercent, startingLatents, betaBefore, betaAfter, betaQuarantine, ...
+    thetaLatents, kappaLatents, deltaHospitalized, gammaAsymptomatic, ...
+    gammaInfected, gammaHospitalized, tauHospitalized, ...
     sigmaHospitalized, tauCritical, roCritical, gammaRecoveredCritical] = ...
     unpackModelParams(params)
 
 quarantinePercent = params(1);
-betaBefore = params(2);
-betaAfter = params(3);
-betaQuarantine = params(4);
-deltaHospitalized = params(5);
-gammaInfected = params(6);
-gammaHospitalized = params(7);
-tauHospitalized = params(8);
-sigmaHospitalized = params(9);
-tauCritical = params(10);
-roCritical = params(11);
-gammaRecoveredCritical = params(12);
+startingLatents = params(2);
+betaBefore = params(3);
+betaAfter = params(4);
+betaQuarantine = params(5);
+thetaLatents = params(6);
+kappaLatents = params(7);
+gammaAsymptomatic = params(8);
+deltaHospitalized = params(9);
+gammaInfected = params(10);
+gammaHospitalized = params(11);
+tauHospitalized = params(12);
+sigmaHospitalized = params(13);
+tauCritical = params(14);
+roCritical = params(15);
+gammaRecoveredCritical = params(16);
 
 % quarantinePercent = 0.75;%params(1);
 % betaBefore = 0.78;%params(2);
