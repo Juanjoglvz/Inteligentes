@@ -22,7 +22,7 @@ for i=1:length(name_ccaa)
     constants = [population, quarantineDay];
 
     %data = output.historic{i};
-    data = data_spain;
+    data = output.historic{i};
 
     rng(3214654, 'twister');
     
@@ -32,9 +32,9 @@ for i=1:length(name_ccaa)
 
 end
 
-[quarantinePercent, betaBefore, betaAfter, betaQuarantine, ...
-    deltaHospitalized, gammaInfected, gammaHospitalized, tauHospitalized, ...
-    sigmaHospitalized, tauCritical, roCritical, gammaRecoveredCritical] = ...
+[PquarantinePercent, PbetaBefore, PbetaAfter, PbetaQuarantine, ...
+    PdeltaHospitalized, PgammaInfected, PgammaHospitalized, PtauHospitalized, ...
+    PsigmaHospitalized, PtauCritical, ProCritical, PgammaRecoveredCritical] = ...
     unpackModelParams(optimalParams);
 
 [RMSE, x, y] = optimizeODE(data, length(data.label_x) * timeFactor,...
@@ -79,6 +79,8 @@ plot(1:length(data.label_x), data.DailyDeaths);
 xlabel('Dias');
 ylabel('Defunciones diarias');
 grid minor
+
+autoArrangeFigures();
 
 function [c, ceq] = nonlcon(x)
 c = x(3) - x(2); % Hope for the best and that the optimizer will figure

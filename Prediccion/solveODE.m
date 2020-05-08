@@ -10,11 +10,11 @@ odes = @(t, y) getODE(t, y, constants, params);
 tspanBefore = tspan(tspan <= dayQuarantine);
 tspanAfter = tspan(tspan >= dayQuarantine);
 
-[x1, y1] = ode45(odes, tspanBefore, [0, population - 2, 2, 0, 0, 0, 0, 0, 0]);
+[x1, y1] = ode45(odes, tspanBefore, [0, population - 2, 2, 0, 0, 0, 0, 0]);
 
 dquarantinedt = y1(end, 2) * quarantinePercent;
 
-[x2, y2] = ode45(odes, tspanAfter, [dquarantinedt, y1(end, 2) - dquarantinedt, y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6), y1(end, 7), y1(end, 8), y1(end, 9)]);
+[x2, y2] = ode45(odes, tspanAfter, [dquarantinedt, y1(end, 2) - dquarantinedt, y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6), y1(end, 7), y1(end, 8)]);
 
 x = cat(1, x1, x2(2:end, :));
 y = cat(1, y1, y2(2:end, :));
@@ -59,7 +59,7 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
             
         deltaHospitalized * I ...
             - gammaHospitalized * H ...
-            - tauHospitalized * H
+            - tauHospitalized * H ...
             - sigmaHospitalized * H; % H
             
         sigmaHospitalized * H ...
