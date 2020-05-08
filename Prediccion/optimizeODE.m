@@ -12,11 +12,12 @@ Q = interpolatedY(:, 1);
 S = interpolatedY(:, 2);
 L = interpolatedY(:, 3);
 I = interpolatedY(:, 4);
-H = interpolatedY(:, 5);
-U = interpolatedY(:, 6);
-UR = interpolatedY(:, 7);
-R = interpolatedY(:, 8);
-D = interpolatedY(:, 9);
+A = interpolatedY(:, 5);
+H = interpolatedY(:, 6);
+U = interpolatedY(:, 7);
+UR = interpolatedY(:, 8);
+R = interpolatedY(:, 9);
+D = interpolatedY(:, 10);
 
 Idata = data.DailyCases;
 Hdata = data.Hospitalized;
@@ -30,7 +31,7 @@ RMSEU = computeRMSE(Udata, cumsum(U));
 RMSER = computeRMSE(Rdata(2:end), diff(R));
 RMSED = computeRMSE(Ddata(2:end), diff(D));
 
-RMSE = RMSEI + RMSEH + RMSEU;% + RMSER + RMSED;
+RMSE = RMSEI + RMSEH + RMSEU + RMSER + RMSED;
 %RMSE = RMSEI;
     
 end

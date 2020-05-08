@@ -7,12 +7,12 @@ ccaaPopulation = getCCAAPopulation();
 solverStep = 1;
 quarantineDay = 26;
 
-vars = 14;
+vars = 16;
 
 timeFactor = 5;
 
 for i=1:length(name_ccaa)
-    if i ~= 6
+    if i ~= 7
         continue;
     end
     
@@ -21,11 +21,12 @@ for i=1:length(name_ccaa)
     
     constants = [population, quarantineDay];
 
-    data = output.historic{i};
+    %data = output.historic{i};
+    data = data_spain;
     
     daysToSolve = length(data.label_x);    
 
-    rng(3214654, 'twister');
+    rng(3214655, 'twister');
     
     funcToOptimize = @(x) optimizeODE(data, daysToSolve, solverStep, constants, x);
     
@@ -83,7 +84,18 @@ xlabel('Dias');
 ylabel('Defunciones diarias');
 grid minor
 
-autoArrangeFigures();
+figure
+hold on
+plot(x, cumsum(y(:, 4)))
+plot(x, cumsum(y(:, 5)))
+plot(1:length(data.label_x), data.AcumulatedPRC)
+xline(length(data.label_x))
+legend('Asintomáticos', 'Infectados', 'Datos acumulados reales')
+xlabel('Día')
+ylabel('Casos')
+grid minor
+
+autoArrangeFigures(2, 3, 1);
 
 function [c, ceq] = nonlcon(x)
 c = x(3) - x(2); % Hope for the best and that the optimizer will figure

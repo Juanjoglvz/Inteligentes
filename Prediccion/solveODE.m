@@ -3,18 +3,17 @@ function [x, y] = solveODE(tspan, constants, params)
 
 [quarantinePercent, startingLatents] = unpackModelParams(params);
 
-
 odes = @(t, y) getODE(t, y, constants, params);
 tspanBefore = tspan(tspan <= dayQuarantine);
 tspanAfter = tspan(tspan >= dayQuarantine);
 
-[x1, y1] = ode45(odes, tspanBefore, [0, population - 2, startingLatents, 2, 0, 0, 0, 0, 0]);
+[x1, y1] = ode45(odes, tspanBefore, [0, population - 2, startingLatents, 2, 0, 0, 0, 0, 0, 0]);
 
 dquarantinedt = y1(end, 2) * quarantinePercent;
 
 [x2, y2] = ode45(odes, tspanAfter, ...
     [dquarantinedt, y1(end, 2) - dquarantinedt, ...
-    y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6), y1(end, 7), y1(end, 8), y1(end, 9)]);
+    y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6), y1(end, 7), y1(end, 8), y1(end, 9), y1(end, 10)]);
 
 x = cat(1, x1, x2(2:end, :));
 y = cat(1, y1, y2(2:end, :));
@@ -30,11 +29,12 @@ Q = y(1);
 S = y(2);
 L = y(3);
 I = y(4);
-H = y(5);
-U = y(6);
-UR = y(7);
-R = y(8);
-D = y(9);
+A = y(5);
+H = y(6);
+U = y(7);
+UR = y(8);
+R = y(9);
+D = y(10);
 
 [population, dayQuarantine] = unpackModelConstants(constants);
 
@@ -56,11 +56,15 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
         
         betaQuarantine * Q * I / population ...
             + beta * S * I / population ...
-            - thetaLatents * L; % L
+            - thetaLatents * L ...
+            - kappaLatents * L; % L
         
         thetaLatents * L ...
             - deltaHospitalized * I ...
             - gammaInfected * I; % I
+           
+        kappaLatents * L ...
+            - gammaAsymptomatic * A;
             
         deltaHospitalized * I ...
             - gammaHospitalized * H ...
@@ -74,7 +78,8 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
         roCritical * U ...
             - gammaRecoveredCritical * UR; % UR
         
-        gammaInfected * I ...
+        gammaAsymptomatic * A ...
+            + gammaInfected * I ...
             + gammaHospitalized * H ...
             + gammaRecoveredCritical * UR; % R
         
