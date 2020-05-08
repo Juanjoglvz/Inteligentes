@@ -7,7 +7,7 @@ ccaaPopulation = getCCAAPopulation();
 solverStep = 1;
 quarantineDay = 26;
 
-vars = 16;
+vars = 14;
 
 timeFactor = 5;
 
@@ -28,12 +28,12 @@ for i=1:length(name_ccaa)
     
     [optimalParams, ~] = ga(@(x) ...
         optimizeODE(data, length(data.label_x), solverStep, ...
-        constants, x), vars, [], [], [], [], zeros(1, vars), [1 Inf 1 1 1 1 1 1 1 1 1 1 1 1 1 1], @(x) nonlcon(x));
+        constants, x), vars, [], [], [], [], zeros(1, vars), [1 Inf 1 1 1 1 1 1 1 1 1 1 1 1], @(x) nonlcon(x));
 
 end
 
 [PquarantinePercent, PstartingLatents, PbetaBefore, PbetaAfter, PbetaQuarantine, ...
-    PthetaLatents, PkappaLatents, PdeltaHospitalized, PgammaAsymptomatic, ...
+    PthetaLatents, PdeltaHospitalized, ...
     PgammaInfected, PgammaHospitalized, PtauHospitalized, ...
     PsigmaHospitalized, PtauCritical, ProCritical, PgammaRecoveredCritical] = ...
     unpackModelParams(optimalParams);
