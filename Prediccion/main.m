@@ -21,16 +21,14 @@ for i=1:length(name_ccaa)
     
     constants = [population, quarantineDay];
 
-    data = output.historic{i};
+    %data = output.historic{i};
+    data = data_spain;
 
     rng(3214654, 'twister');
     
-    [optimalParams, RMSE] = ga(@(x) ...
+    [optimalParams, ~] = ga(@(x) ...
         optimizeODE(data, length(data.label_x), solverStep, ...
         constants, x), vars, [], [], [], [], zeros(1, vars), ones(1, vars), @(x) nonlcon(x));
-
-    [RMSE, x, y] = optimizeODE(data, length(data.label_x) * timeFactor,...
-        solverStep, constants, optimalParams);
 
 end
 

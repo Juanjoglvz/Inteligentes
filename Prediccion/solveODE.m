@@ -1,6 +1,8 @@
 function [x, y] = solveODE(tspan, constants, params)
 [population, dayQuarantine] = unpackModelConstants(constants);
 
+params(12) = 1/6;
+
 quarantinePercent = unpackModelParams(params);
 
 
@@ -50,8 +52,8 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
     
         -1 * beta * S * I / population; % S
         
-        beta * S * I / population ...
-            + betaQuarantine * Q * I / population ...
+        betaQuarantine * Q * I / population ...
+            + beta * S * I / population ...
             - deltaHospitalized * I ...
             - gammaInfected * I; % I
             
