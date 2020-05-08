@@ -12,7 +12,7 @@ vars = 14;
 timeFactor = 5;
 
 for i=1:length(name_ccaa)
-    if i ~= 9
+    if i ~= 6
         continue;
     end
     
@@ -21,21 +21,23 @@ for i=1:length(name_ccaa)
     
     constants = [population, quarantineDay];
 
-    %data = output.historic{i};
-    data = data_spain;
+    data = output.historic{i};
+    
+    daysToSolve = length(data.label_x);    
 
     rng(3214654, 'twister');
     
-    [optimalParams, ~] = ga(@(x) ...
-        optimizeODE(data, length(data.label_x), solverStep, ...
-        constants, x), vars, [], [], [], [], zeros(1, vars), [1 Inf 1 1 1 1 1 1 1 1 1 1 1 1], @(x) nonlcon(x));
+    funcToOptimize = @(x) optimizeODE(data, daysToSolve, solverStep, constants, x);
+    
+    [optimalParams, ~] = ga(funcToOptimize, vars, [], [], [], [], ...
+        zeros(1, vars), [1 Inf 1 1 1 1 1 1 1 1 1 1 1 1 1 1], @(x) nonlcon(x));
 
 end
 
-[PquarantinePercent, PstartingLatents, PbetaBefore, PbetaAfter, PbetaQuarantine, ...
-    PthetaLatents, PdeltaHospitalized, ...
-    PgammaInfected, PgammaHospitalized, PtauHospitalized, ...
-    PsigmaHospitalized, PtauCritical, ProCritical, PgammaRecoveredCritical] = ...
+[quarantinePercent, startingLatents, betaBefore, betaAfter, betaQuarantine, ...
+    thetaLatents, kappaLatents, gammaAsymptomatic, deltaHospitalized, ...
+    gammaInfected, gammaHospitalized, tauHospitalized, ...
+    sigmaHospitalized, tauCritical, roCritical, gammaRecoveredCritical] = ...
     unpackModelParams(optimalParams);
 
 [RMSE, x, y] = optimizeODE(data, length(data.label_x) * timeFactor,...
@@ -43,7 +45,7 @@ end
 
 figure
 hold on
-plot(x, y(:, 3));
+plot(x, y(:, 4));
 plot(1:length(data.label_x), data.DailyCases);
 xlabel('Dias');
 ylabel('Casos diarios');
@@ -51,7 +53,7 @@ grid minor
 
 figure
 hold on
-plot(x, cumsum(y(:, 4)));
+plot(x, cumsum(y(:, 6)));
 plot(1:length(data.label_x), data.Hospitalized);
 xlabel('Dias');
 ylabel('Hospitalizaciones totales');
@@ -59,7 +61,7 @@ grid minor
 
 figure
 hold on
-plot(x, cumsum(y(:, 5)));
+plot(x, cumsum(y(:, 7)));
 plot(1:length(data.label_x), data.Critical);
 xlabel('Dias');
 ylabel('Ingresos en UCI totales');
@@ -67,7 +69,7 @@ grid minor
 
 figure
 hold on
-plot(x(2:end), diff(y(:, 7)));
+plot(x(2:end), diff(y(:, 9)));
 plot(1:length(data.label_x), data.DailyRecoveries);
 xlabel('Dias');
 ylabel('Recuperaciones diarias');
@@ -75,7 +77,7 @@ grid minor
 
 figure
 hold on
-plot(x(2:end), diff(y(:, 8)));
+plot(x(2:end), diff(y(:, 10)));
 plot(1:length(data.label_x), data.DailyDeaths);
 xlabel('Dias');
 ylabel('Defunciones diarias');
