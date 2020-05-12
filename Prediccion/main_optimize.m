@@ -12,27 +12,23 @@ vars = 16;
 timeFactor = 5;
 
 for i=1:length(name_ccaa)
-    if i ~= 7
+    if i ~= 14
         continue;
     end
     
     ccaa = name_ccaa{i};
-    population = ccaaPopulation(ccaa);
-    
+    population = ccaaPopulation(ccaa);    
     constants = [population, quarantineDay];
 
-    %data = output.historic{i};
+    data = output.historic{i};
     data = data_spain;
     
-    daysToSolve = length(data.label_x);    
+    daysToSolve = length(data.label_x); 
+    funcToOptimize = @(x) optimizeODE(data, daysToSolve, solverStep, constants, x);   
 
     rng(3214655, 'twister');
-    
-    funcToOptimize = @(x) optimizeODE(data, daysToSolve, solverStep, constants, x);
-    
     [optimalParams, ~] = ga(funcToOptimize, vars, [], [], [], [], ...
         zeros(1, vars), [1 Inf 1 1 1 1 1 1 1 1 1 1 1 1 1 1], @(x) nonlcon(x));
-
 end
 
 [quarantinePercent, startingLatents, betaBefore, betaAfter, betaQuarantine, ...

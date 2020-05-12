@@ -32,7 +32,6 @@ RMSER = computeRMSE(Rdata(2:end), diff(R));
 RMSED = computeRMSE(Ddata(2:end), diff(D));
 
 RMSE = RMSEI + RMSEH + RMSEU + RMSER + RMSED;
-%RMSE = RMSEI;
     
 end
 
