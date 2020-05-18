@@ -8,7 +8,7 @@ tspanAfter = tspan(tspan >= dayQuarantine);
 
 % Solve ODE before discontinuity
 [x1, y1] = ode45(odes, tspanBefore, ...
-    [0, population - 2 - startingLatents, startingLatents, 2, 0, 0, 0, 0, 0, 0]);
+    [0, population - 2 - startingLatents, startingLatents, 2, 0, 0, 0, 0, 0, 0, 0]);
 
 dQdt = y1(end, 2) * quarantinePercent; % Number of susceptibles that go into quarantine
 
@@ -16,7 +16,7 @@ dQdt = y1(end, 2) * quarantinePercent; % Number of susceptibles that go into qua
 [x2, y2] = ode45(odes, tspanAfter, ...
     [dQdt, y1(end, 2) - dQdt, ...
     y1(end, 3), y1(end, 4), y1(end, 5), y1(end, 6), ...
-    y1(end, 7), y1(end, 8), y1(end, 9), y1(end, 10)]);
+    y1(end, 7), y1(end, 8), y1(end, 9), y1(end, 10), y1(end, 11)]);
 
 % Concat both results
 x = cat(1, x1, x2(2:end, :));
@@ -34,6 +34,7 @@ U = y(7);
 UR = y(8);
 R = y(9);
 D = y(10);
+RA = y(11);
 
 [population, dayQuarantine] = unpackModelConstants(constants);
 
@@ -49,12 +50,14 @@ else
     beta = betaAfter;
 end
 
-dydt = [ -1 * betaQuarantine * Q * I / population; % Q
+canInfect = I + A;
+
+dydt = [ -1 * betaQuarantine * Q * canInfect / population; % Q
     
-        -1 * beta * S * I / population; % S
+        -1 * beta * S * canInfect / population; % S
         
-        betaQuarantine * Q * I / population ...
-            + beta * S * I / population ...
+        betaQuarantine * Q * canInfect / population ...
+            + beta * S * canInfect / population ...
             - thetaLatents * L ...
             - kappaLatents * L; % L
         
@@ -63,7 +66,7 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
             - gammaInfected * I; % I
            
         kappaLatents * L ...
-            - gammaAsymptomatic * A;
+            - gammaAsymptomatic * A; % A
             
         deltaHospitalized * I ...
             - gammaHospitalized * H ...
@@ -77,11 +80,12 @@ dydt = [ -1 * betaQuarantine * Q * I / population; % Q
         roCritical * U ...
             - gammaRecoveredCritical * UR; % UR
         
-        gammaAsymptomatic * A ...
-            + gammaInfected * I ...
+        gammaInfected * I ...
             + gammaHospitalized * H ...
             + gammaRecoveredCritical * UR; % R
         
         tauHospitalized * H ...
-            + tauCritical * U;]; % D
+            + tauCritical * U; % D
+           
+        gammaAsymptomatic * A]; % RA
 end

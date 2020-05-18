@@ -20,5 +20,6 @@ map('Región de Murcia') = 1478509;
 map('Comunidad Foral de Navarra') = 647554;
 map('País Vasco') = 2167707;
 map('La Rioja') = 315675;
+map('España') = 47100396;
 
 end
