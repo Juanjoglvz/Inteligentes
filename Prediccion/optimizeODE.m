@@ -1,5 +1,6 @@
 function [RMSE, x, y] = optimizeODE(data, maxTime, step, constants, params)
-clearGlobalVariables();
+epsilon = 0.03;
+targetMortalityRate = 0.11;
 global funccounter;
 funccounter = funccounter + 1;
 
@@ -22,6 +23,8 @@ R = interpolatedY(:, 9);
 D = interpolatedY(:, 10);
 RA = interpolatedY(:, 11);
 
+mortalityRate = computeMortalityRate(interpolatedY);
+
 Idata = data.DailyCases;
 Hdata = data.Hospitalized;
 Udata = data.Critical;
@@ -38,6 +41,11 @@ RMSER = computeRMSE(data.AcumulatedRecoveries, R);
 RMSED = computeRMSE(data.Deaths, D);
 
 RMSE = RMSEI + RMSEH + RMSEU + RMSER + RMSED;
+
+if mortalityRate < (targetMortalityRate - epsilon) ...
+        || mortalityRate > (targetMortalityRate + epsilon)
+    RMSE = Inf;
+end
     
 end
 
