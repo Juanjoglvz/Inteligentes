@@ -28,8 +28,8 @@ end
 
     
 %% Import data
-results_url = 'https://cnecovid.isciii.es/covid19/resources/agregados.csv';
-websave("data/ccaa_data_isciii.csv", results_url);
+% results_url = 'https://cnecovid.isciii.es/covid19/resources/agregados.csv';
+% websave("data/ccaa_data_isciii.csv", results_url);
 ccaa_data = readcell("data/ccaa_data_isciii.csv", 'DatetimeType', 'text');
 
 

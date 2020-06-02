@@ -1,8 +1,8 @@
 %%%
-% Target function to optimize for single-objective optimizer
+% Target function to optimize for multiobjective optimizer
 %%%
-function [RMSE, x, y] = optimizeODE(data, maxTime, step, constants, ...
-                                    params, lossfnc)
+function [RMSEI, RMSEH, RMSEU, RMSER, RMSED] = ...
+    optimizeODEMultiobj(data, maxTime, step, constants, params, lossfnc)
 global funccounter;
 funccounter = funccounter + 1;
 
@@ -40,7 +40,5 @@ RMSEU = lossfnc(Udata, TU);
 RMSER = lossfnc(Rdata, R);
 RMSED = lossfnc(Ddata, D);
 
-RMSE = RMSEI + RMSEH + RMSEU + RMSER + RMSED;
-    
 end
 

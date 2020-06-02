@@ -1,3 +1,6 @@
+%%%
+% Basic sir model solving and plotting
+%%%
 clear;
 close all;
 

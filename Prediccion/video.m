@@ -1,12 +1,15 @@
+%%%
+% Generate video that depicts a pie chart of the population of each 
+% compartment of the model
+%%%
 clear;
 close all;
 load opt.mat
 
-lbls = {'Cuarentena', 'Susceptibles', 'Latentes', 'Infectados', 'Asintomáticos', 'Hospitalizados', 'UCI', 'Recuperados UCI', 'Recuperado', 'Fallecido', 'Recuperados Asintomaticos'};
+lbls = {'Cuarentena', 'Susceptibles', 'Latentes', 'Infectados', 'Asintomáticos', 'Hospitalizados', 'UCI', 'Recuperados UCI', 'Recuperado', 'Fallecido', 'Recuperados Asintomaticos', 'Total Infectados', 'Total Hospitalizados', 'Total UCI'};
 
-%plotFcn(y, lbls, 50);
 
-generateVideo('videoprueba.mp4', 435 / 3, @(day) plotFcn(y, lbls, day), 0.35)
+generateVideo('videoprueba.mp4', 435 / 3, @(day) plotFcn(y3, lbls, day), 0.35)
 
 function generateVideo(filename, days, plotFcn, secsPerDay, framerate)
 if nargin < 5

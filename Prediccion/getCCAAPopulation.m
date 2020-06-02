@@ -1,3 +1,6 @@
+%%%
+% Returns a dictionary with the population of each CCAA or country
+%%%
 function map = getCCAAPopulation()
 map = containers.Map('KeyType', 'char', 'ValueType', 'double');
 
