@@ -1,3 +1,6 @@
+%%%
+% Evaluate the model with arbitrary params
+%%%
 clear;
 close all;
 

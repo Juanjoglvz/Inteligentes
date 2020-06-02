@@ -1,3 +1,6 @@
+%%%
+% Auxiliary plot that shows the discontinuity of the quarantine compartment
+%%%
 clear;
 close all;
 

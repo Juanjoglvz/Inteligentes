@@ -2,24 +2,24 @@ function [output, name_ccaa, iso_ccaa, data_spain] = HistoricDataSpain()
 
 missingDataText = 'NA';
 
-cod_ccaa_cell = {'AN', 'Andalucía';
-            'AR', 'Aragón';
+cod_ccaa_cell = {'AN', 'Andalucï¿½a';
+            'AR', 'Aragï¿½n';
             'AS', 'Principado de Asturias';
             'IB', 'Islas Baleares';
             'CN', 'Canarias';
             'CB', 'Cantabria';
             'CM', 'Castilla-La Mancha';
-            'CL', 'Castilla y León';
-            'CT', 'Cataluña';
+            'CL', 'Castilla y Leï¿½n';
+            'CT', 'Cataluï¿½a';
             'CE', 'Ceuta';
             'VC', 'Comunidad Valenciana';
             'EX', 'Extremadura';
             'GA', 'Galicia';
             'MD', 'Comunidad de Madrid';
             'ML', 'Melilla';
-            'MC', 'Región de Murcia';
+            'MC', 'Regiï¿½n de Murcia';
             'NC', 'Comunidad Foral de Navarra';
-            'PV', 'País Vasco';
+            'PV', 'Paï¿½s Vasco';
             'RI', 'La Rioja'};
 
 if ~isfolder('data')        
@@ -28,8 +28,8 @@ end
 
     
 %% Import data
-results_url = 'https://cnecovid.isciii.es/covid19/resources/agregados.csv';
-websave("data/ccaa_data_isciii.csv", results_url);
+% results_url = 'https://cnecovid.isciii.es/covid19/resources/agregados.csv';
+% websave("data/ccaa_data_isciii.csv", results_url);
 ccaa_data = readcell("data/ccaa_data_isciii.csv", 'DatetimeType', 'text');
 
 
